@@ -1,6 +1,6 @@
 var React = require('react');
 
-module.exports = React.createClass({
+var TemperatureControl = React.createClass({
   getInitialState: function() {
     return { locked: true };
   },
@@ -32,3 +32,5 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = TemperatureControl;
