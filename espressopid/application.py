@@ -31,5 +31,5 @@ app = Application([
         'path': frontenddir,
         "default_filename": "index.html"
     }),
-])
+], debug=True)
 

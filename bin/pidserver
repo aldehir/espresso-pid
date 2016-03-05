@@ -1,9 +1,13 @@
 #!/usr/bin/env python
-from twisted.internet import reactor
-from tornado.platform.twisted import TwistedIOLoop
+#from twisted.internet import reactor
+#from tornado.platform.twisted import TwistedIOLoop
+from tornado.ioloop import IOLoop
 from espressopid import app
 
 if __name__ == "__main__":
-    TwistedIOLoop().install()
+    #TwistedIOLoop().install()
+
     app.listen(8888)
-    reactor.run()
+    IOLoop.current().start()
+
+    #reactor.run()
