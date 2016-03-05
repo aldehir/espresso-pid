@@ -1,1 +1,13 @@
+# Python compiled files
 *.pyc
+*.pyo
+
+# NPM
+.DS_Store
+node_modules
+npm-debug.log
+
+# Generated web files
+www/bower_components
+www/css
+www/js/bundle.js

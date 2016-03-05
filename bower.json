@@ -1,0 +1,25 @@
+{
+  "name": "espressopid",
+  "version": "1.0.0",
+  "authors": [
+    "Aldehir Rojas <hello@aldehir.com>"
+  ],
+  "description": "Front-end of a PID controller for espresso machines",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "https://github.com/aldehir/espresso-pid",
+  "dependencies": {
+    "foundation-sites": "~6.1.2",
+    "motion-ui": "~1.1.0",
+    "foundation-sites": "~6.2.0",
+    "motion-ui": "~1.2.2"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "frontend/bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}

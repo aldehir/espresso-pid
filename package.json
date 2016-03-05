@@ -1,0 +1,32 @@
+{
+  "name": "espressopid",
+  "version": "1.0.0",
+  "description": "Front-end of a PID controller for espresso machines",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-sass": "^2.1.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "browserify": {
+    "transform": [["babelify", { "presets": "react" }]]
+  },
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp sass"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aldehir/espresso-pid"
+  },
+  "author": "Aldehir Rojas <hello@aldehir.com>",
+  "license": "MIT",
+  "private": true
+}
