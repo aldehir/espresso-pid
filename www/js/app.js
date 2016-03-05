@@ -1,9 +1,14 @@
 $(document).foundation();
 
 var React = require('react');
-var ReactDOM = require('react-dom');
+var TemperatureControl = require('./controls/temperature');
 
 ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('example')
+  <TemperatureControl label="Brew" />,
+  document.getElementById('brew-temp-control')
+);
+
+ReactDOM.render(
+  <TemperatureControl label="Steam" />,
+  document.getElementById('steam-temp-control')
 );
