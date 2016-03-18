@@ -8,6 +8,6 @@ node_modules
 npm-debug.log
 
 # Generated web files
-www/bower_components
-www/css
-www/js/bundle.js
+web/public/bower_components
+web/public/css
+web/public/js/bundle.js
