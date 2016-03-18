@@ -6,11 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espresso PID Controller</title>
     <link rel="stylesheet" href="css/app.css">
+    <style>
+      .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .tick text {
+        font-size: 0.8em;
+      }
+      
+      .y.axis .tick line {
+        opacity: 0.1;
+      }
+
+      .x.axis .path {
+        display: none;
+      }
+
+      .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+
+      .area {
+        fill: yellow;
+        opacity: 0.5;
+      }
+    </style>
   </head>
   <body>
     <div class="top-bar">
       <div class="row">
-        <div class="small-12">
+        <div class="small-12 columns">
           <div class="top-bar-left">
             <ul class="dropdown menu" data-dropdown-menu>
               <li class="menu-text">Espresso PID</li>
@@ -20,15 +50,69 @@
       </div>
     </div>
 
+    <div class="row align-center power-status">
+      <div class="large-1 medium-3 small-3 columns">
+        <span class="power-label">Power</span>
+      </div>
+      <div class="large-1 medium-3 small-3 columns">
+        <div class="switch">
+          <div class="switch-paddle static active">
+            <span class="switch-active" aria-hidden="true">On</span>
+            <span class="switch-inactive" aria-hidden="true">Off</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="large-1 medium-3 small-3 columns">
+        <span class="power-label">Steam</span>
+      </div>
+      <div class="large-1 medium-3 small-3 columns">
+        <div class="switch">
+          <div class="switch-paddle static">
+            <span class="switch-active" aria-hidden="true">On</span>
+            <span class="switch-inactive" aria-hidden="true">Off</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="large-1 medium-3 small-3 columns">
+        <span class="power-label">Pump</span>
+      </div>
+      <div class="large-1 medium-3 small-3 columns">
+        <div class="switch">
+          <div class="switch-paddle static">
+            <span class="switch-active" aria-hidden="true">On</span>
+            <span class="switch-inactive" aria-hidden="true">Off</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="large-1 medium-3 small-3 columns">
+        <span class="power-label">Valve</span>
+      </div>
+      <div class="large-1 medium-3 small-3 columns">
+        <div class="switch">
+          <div class="switch-paddle static">
+            <span class="switch-active" aria-hidden="true">On</span>
+            <span class="switch-inactive" aria-hidden="true">Off</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
-      <div class="small-12 columns"><h3>Configuration</h3></div>
-      <div id="brew-temp-control" class="temp-control medium-6 small-12 columns"></div>
-      <div id="steam-temp-control" class="temp-control medium-6 small-12 columns"></div>
+      <div id="chart" class="small-12 columns" data-resize="chart"></div>
+    </div>
+
+    <div class="row">
+      <div id="brew-temp-control" class="temp-control large-6 medium-12 small-12 columns"></div>
+      <div id="steam-temp-control" class="temp-control large-6 medium-12 small-12 columns"></div>
     </div>
 
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/what-input/what-input.js"></script>
     <script src="bower_components/foundation-sites/dist/foundation.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
     <script src="js/bundle.js"></script>
   </body>
 </html>

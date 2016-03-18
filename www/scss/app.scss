@@ -60,3 +60,47 @@
   }
 }
 
+// Create our own switch paddle, but one that's not clickable. Not really for
+// input, more for display.
+.switch-paddle.static {
+  cursor: default;
+
+  &.active {
+    background: $switch-background-active;
+
+    .switch &::after {
+      #{$global-left}: 2.25rem;
+    }
+
+    .switch.tiny &::after {
+      #{$global-left}: 3rem - 1rem - $switch-paddle-offset;
+    }
+
+    .switch.small &::after {
+      #{$global-left}: 3.5rem - 1.25rem - $switch-paddle-offset;
+    }
+
+    .switch.large &::after {
+      #{$global-left}: 5rem - 2rem - $switch-paddle-offset;
+    }
+
+    & > .switch-active {
+      display: block;
+    }
+
+    & > .switch-inactive {
+      display: none;
+    }
+  }
+}
+
+.power-status {
+  margin-top: 1rem;
+
+  .columns span.power-label {
+    display: block;
+    padding: 0.25rem 0 0.25rem 0;
+    text-align: right;
+    font-weight: bold;
+  }
+}

@@ -4,7 +4,7 @@ import logging
 from tornado.web import Application, StaticFileHandler
 
 from handlers import IndexHandler
-from rest.handlers import TemperatureHandler
+from rest.handlers import TemperatureHandler, EventHandler
 from rest.handlers.config import BrewConfigHandler, SteamConfigHandler
 
 from config import Configuration
@@ -25,6 +25,7 @@ app = Application([
     (r"/api/temperature", TemperatureHandler, {'thermostat': thermo}),
     (r"/api/config/brew", BrewConfigHandler, {'configuration': config}),
     (r"/api/config/steam", SteamConfigHandler, {'configuration': config}),
+    (r"/api/events", EventHandler),
 
     # Front-end
     (r"/(.*)", StaticFileHandler, {
