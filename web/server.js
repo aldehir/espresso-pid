@@ -1,50 +1,37 @@
-var express = require('express');
-var app = express();
-var samples = require('./data/sample');
+'use strict';
 
-var api = express();
+const koa = {
+  app: require('koa'),
+  router: require('koa-router'),
+  serve: require('koa-static')
+}
 
-api.get('/temperature', function (req, res) {
-  res.json({ 'temperature': 90.0 });
+const EventStream = require('./eventstream');
+
+let app = koa.app();
+let router = koa.router();
+
+router.get('/api/temperature', function *(next) {
+  this.body = 'Hello World!';
 });
 
+router.get('/api/events', function *(next) {
+  let stream = new EventStream();
 
-// TODO: Implement an actual events
-api.get('/events', function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/event-stream',
-                      'Cache-Control': 'no-cache'});
+  // When the socket closes, stop pushing to the event stream
+  this.request.socket.on('close', (err) => {
+    stream.clear();
+  });
 
-  var index = 0,
-      time = 0;
-
-  var sendevent = function() {
-    if (index >= samples.length) index = 0;
-
-    for (var i = index + 1; i < samples.length; i++) {
-      if (Math.abs(samples[i][0] - time) >= 0.5) {
-        index = i;
-        break;
-      }
-    }
-
-    time = samples[index][0];
-
-    var tempc = samples[index][3];
-    var tempf = (tempc * 1.8) + 32.0;
-
-    res.write(
-      "data: " + JSON.stringify({ 'time': time, 'temp': tempf }) + "\n\n"
-    );
-
-    index += 1;
-  };
-
-  sendevent();
-  setInterval(sendevent, 500);
-
+  this.response.append('Cache-Control', 'no-cache');
+  this.response.type = 'text/event-stream';
+  this.body = stream;
 });
 
-app.use('/api', api);
-app.use(express.static('public'));
+// router.get('/*', koa.serve(__dirname + '/public'));
+
+app.use(router.routes())
+   .use(router.allowedMethods())
+   .use(koa.serve(__dirname + '/public'));
 
 app.listen(8000);

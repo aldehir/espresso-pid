@@ -37,6 +37,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "express": "^4.13.4"
+    "koa": "^1.2.0",
+    "koa-router": "^5.4.0",
+    "koa-static": "^2.0.0",
+    "sysfs-gpio": "^1.0.0"
   }
 }
