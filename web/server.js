@@ -1,37 +1,53 @@
 'use strict';
 
+const _  = require('lodash');
+
 const koa = {
   app: require('koa'),
   router: require('koa-router'),
   serve: require('koa-static')
 }
 
-const EventStream = require('./eventstream');
+const SSE = require('./sse');
+const FakeThermocouple = require('../models/mock/fakethermocouple');
+const TemperatureStream = require('./temperaturestream');
 
-let app = koa.app();
-let router = koa.router();
+module.exports = function(options) {
+  let thermocouple = new FakeThermocouple();
+  thermocouple.start();
 
-router.get('/api/temperature', function *(next) {
-  this.body = 'Hello World!';
-});
+  let app = koa.app();
+  let router = koa.router();
 
-router.get('/api/events', function *(next) {
-  let stream = new EventStream();
-
-  // When the socket closes, stop pushing to the event stream
-  this.request.socket.on('close', (err) => {
-    stream.clear();
+  router.get('/api/temperature', function *(next) {
+    this.body = 'Hello World!';
   });
 
-  this.response.append('Cache-Control', 'no-cache');
-  this.response.type = 'text/event-stream';
-  this.body = stream;
-});
+  router.get('/api/events', function *(next) {
+    this.req.setTimeout(Number.MAX_VALUE);
 
-// router.get('/*', koa.serve(__dirname + '/public'));
+    this.type = 'text/event-stream; charset=utf-8';
+    this.set('Cache-Control', 'no-cache');
+    this.set('Connection', 'keep-alive');
 
-app.use(router.routes())
-   .use(router.allowedMethods())
-   .use(koa.serve(__dirname + '/public'));
+    let body = this.body = new SSE();
+    let stream = new TemperatureStream(thermocouple);
+    stream.pipe(body);
 
-app.listen(8000);
+    let close = (err) => {
+      stream.unpipe(body);
+      socket.removeListener('error', close);
+      socket.removeListener('close', close);
+    };
+
+    let socket = this.socket;
+    socket.on('error', close);
+    socket.on('close', close);
+  });
+
+  app.use(router.routes())
+     .use(router.allowedMethods())
+     .use(koa.serve(__dirname + '/public'));
+
+  return app;
+}

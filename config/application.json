@@ -1,0 +1,16 @@
+{
+  "pins": {
+    "power-button": 27,
+    "brew-button": 22,
+    "water-button": 23,
+    "steam-button": 24,
+    "power-relay": 5,
+    "boiler-relay": 6,
+    "pump-relay": 12,
+    "valve-relay": 13
+  },
+  "thermocouple": {
+    "range": [200, 290],
+    "device": "/dev/spidev0.0"
+  }
+}

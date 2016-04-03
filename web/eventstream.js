@@ -1,59 +1,60 @@
 'use strict';
 
 const util = require('util');
-const samples = require('./data/sample');
-const stream = require('stream');
+const Readable = require('stream').Readable;
 
-function TestEventStream() {
-  stream.Readable.call(this);
+module.exports = EventStream;
 
-  this.index = 0;
-  this.time = 0;
-  this.poller = null;
+function EventStream(emitter, propagate) {
+  Readable.call(this, { objectMode: true });
+
+  this._emitter = emitter;
+  this._propagate = propagate;
+  this._listeners = null;
 }
 
-util.inherits(TestEventStream, stream.Readable);
+util.inherits(EventStream, Readable);
 
-TestEventStream.prototype._read = function(size) {
-  if (this.poller === null) {
-    this.poller = setInterval(this.poll.bind(this), 500);
-  }
+EventStream.factory = function(emitter, propagate) {
+  return () => new EventStream(emitter, propagate);
 }
 
-TestEventStream.prototype.clear = function() {
-  if (this.poller) {
-    clearInterval(this.poller);
-    this.index = 0;
-    this.time = 0;
-    this.poller = null;
-  }
+EventStream.prototype.stop = function() {
+  this._cleanup();
 }
 
-TestEventStream.prototype.poll = function() {
-  if (this.index >= samples.length) this.index = 0;
+EventStream.prototype._read = function(size) {
+  if (this._listeners !== null) return;
 
-  for(var i = this.index + 1; i < samples.length; i++) {
-    if (Math.abs(samples[i][0] - this.time) >= 0.5) {
-      this.index = i;
-      break;
+  this._listeners = this._propagate.map((x) => {
+    let listener = this._createCallback(x);
+    this._emitter.on(x, listener);
+    return { event: x, callback: listener };
+  });
+}
+
+EventStream.prototype._cleanup = function() {
+  if (this._listeners === null) return;
+
+  this._listeners.forEach((x) => {
+    this._emitter.removeListener(x.event, x.callback);
+  });
+  this._listeners = null;
+}
+
+EventStream.prototype._createCallback = function(event) {
+  let callback = (obj) => {
+    /*
+    let json = JSON.stringify(obj);
+    let pushed = this.push(`event: ${event}\n`) &&
+                 this.push(`data: ${json}\n\n`);
+    */
+    let pushed = this.push({ event: event, content: JSON.stringify(obj) });
+
+    if (!pushed) {
+      this._cleanup();
     }
-  }
+  };
 
-  this.time = samples[this.index][0];
-
-  var tempc = samples[this.index][3];
-  var tempf = (tempc * 1.8) + 32.0;
-
-  let pushed = this.push(
-    "data: " + JSON.stringify({ 'time': this.time, 'temp': tempf }) + "\n\n"
-  );
-
-  if (!pushed) {
-    this.clear();
-    return;
-  }
-
-  this.index += 1;
+  return callback;
 }
-
-module.exports = TestEventStream;

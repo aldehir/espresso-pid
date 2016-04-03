@@ -35,6 +35,22 @@ $(window).on('resize', _.throttle(function() {
 }, 22.0));
 
 var source = new EventSource('api/events');
-source.addEventListener('message', function(e) {
-  graph.update(JSON.parse(e.data));
+
+// Handle initial history
+source.addEventListener('temperature-history', function(e) {
+  var data = _.map(JSON.parse(e.data),
+                   (item) => ({ time: item[0], temp: item[1] }));
+
+  // FIXME: Ugly hack
+  var first = data.slice(0, -1);
+  var last = data.slice(-1)[0];
+
+  graph.data = first;
+  graph.update(last)
+}, false);
+
+// Add subsequent data points
+source.addEventListener('temperature', function(e) {
+  var data = JSON.parse(e.data);
+  graph.update({ time: data[0], temp: data[1] });
 }, false);
