@@ -52,11 +52,11 @@ TemperatureConfiguration.prototype = {
   },
 
   validate: function(value) {
-    if (value < this._min)
-      throw "Temperature is below allowed minimum of " + this._min;
+    if (value < this.min)
+      throw "Temperature is below allowed minimum of " + this.min;
 
-    if (value > this._max)
-      throw "Temperature is allowed allowed maximum of " + this._max;
+    if (value > this.max)
+      throw "Temperature is allowed allowed maximum of " + this.max;
   },
 
   load: function(configFile) {
