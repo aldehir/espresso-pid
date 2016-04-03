@@ -5,7 +5,8 @@ const _  = require('lodash');
 const koa = {
   app: require('koa'),
   router: require('koa-router'),
-  serve: require('koa-static')
+  serve: require('koa-static'),
+  parse: require('co-body')
 }
 
 const SSE = require('./sse/sse');
@@ -14,7 +15,7 @@ const TemperatureStream = require('./sse/temperaturestream');
 const DEFAULTS = {
 };
 
-module.exports = function(thermocouple, options) {
+module.exports = function(thermocouple, tempConfig, options) {
   let opts = {};
   _.defaults(opts, options, DEFAULTS);
 
@@ -23,6 +24,44 @@ module.exports = function(thermocouple, options) {
 
   router.get('/api/temperature', function *(next) {
     this.body = 'Hello World!';
+  });
+
+  router.get('/api/temperature/brew', function *(next) {
+    this.type = 'application/json'
+    this.body = JSON.stringify({ temperature: tempConfig.brew });
+  });
+
+  router.post('/api/temperature/brew', function *(next) {
+    let body = yield koa.parse.json(this);
+
+    try {
+      tempConfig.brew = body.temperature;
+      this.body = JSON.stringify({
+        success: true,
+        message: 'Temperature successfully updated'
+      });
+    } catch(err) {
+      this.body = JSON.stringify({ success: false, message: err });
+    }
+  });
+
+  router.get('/api/temperature/steam', function *(next) {
+    this.type = 'application/json'
+    this.body = JSON.stringify({ temperature: tempConfig.steam });
+  });
+
+  router.post('/api/temperature/steam', function *(next) {
+    let body = yield koa.parse.json(this);
+
+    try {
+      tempConfig.steam = body.temperature;
+      this.body = JSON.stringify({
+        success: true,
+        message: 'Temperature successfully updated'
+      });
+    } catch(err) {
+      this.body = JSON.stringify({ success: false, message: err });
+    }
   });
 
   router.get('/api/events', function *(next) {
