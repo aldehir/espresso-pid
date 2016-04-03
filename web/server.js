@@ -9,12 +9,14 @@ const koa = {
 }
 
 const SSE = require('./sse');
-const FakeThermocouple = require('../models/mock/fakethermocouple');
 const TemperatureStream = require('./temperaturestream');
 
-module.exports = function(options) {
-  let thermocouple = new FakeThermocouple();
-  thermocouple.start();
+const DEFAULTS = {
+};
+
+module.exports = function(thermocouple, options) {
+  let opts = {};
+  _.defaults(opts, options, DEFAULTS);
 
   let app = koa.app();
   let router = koa.router();
