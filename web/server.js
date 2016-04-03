@@ -8,8 +8,8 @@ const koa = {
   serve: require('koa-static')
 }
 
-const SSE = require('./sse');
-const TemperatureStream = require('./temperaturestream');
+const SSE = require('./sse/sse');
+const TemperatureStream = require('./sse/temperaturestream');
 
 const DEFAULTS = {
 };
