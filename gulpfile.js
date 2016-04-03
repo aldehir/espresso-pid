@@ -28,7 +28,13 @@ gulp.task('browserify', function() {
 
 gulp.task('build', ['sass', 'browserify']);
 
-gulp.task('default', ['sass', 'browserify'], function() {
+gulp.task('server', function() {
+  return $.nodemon({ script: 'application.js',
+                     ext: 'js',
+                     ignore: ['web/public/**/*'] });
+});
+
+gulp.task('default', ['sass', 'browserify', 'server'], function() {
   gulp.watch(['web/public/scss/**/*.scss'], ['sass']);
   gulp.watch(['web/public/js/**/*.js'], ['browserify']);
 });
