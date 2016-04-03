@@ -26,6 +26,8 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('web/public/js'));
 });
 
+gulp.task('build', ['sass', 'browserify']);
+
 gulp.task('default', ['sass', 'browserify'], function() {
   gulp.watch(['web/public/scss/**/*.scss'], ['sass']);
   gulp.watch(['web/public/js/**/*.js'], ['browserify']);
