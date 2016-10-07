@@ -1,13 +1,13 @@
 {
   "pins": {
-    "power-button": 27,
-    "brew-button": 22,
-    "water-button": 23,
-    "steam-button": 24,
-    "power-relay": 5,
-    "boiler-relay": 6,
-    "pump-relay": 12,
-    "valve-relay": 13
+    "power_button": 27,
+    "brew_button": 22,
+    "water_button": 23,
+    "steam_button": 24,
+    "power_relay": 5,
+    "boiler_relay": 6,
+    "pump_relay": 12,
+    "valve_relay": 13
   },
   "thermocouple": {
     "range": [200, 290],

@@ -10,7 +10,7 @@ function Thermocouple(options) {
   EventEmitter.call(this);
 
   this._history = [];
-  this._keep = 2 * 60;
+  this._keep = 2 * 60 * 1000;
 }
 
 Thermocouple.prototype = {
@@ -19,15 +19,20 @@ Thermocouple.prototype = {
   },
 
   get temperature() {
-    return this._history[this._history.size - 1];
+    return this._history[this._history.size - 1].temp;
   },
 
   _add: function(time, temp) {
-    // Add new point and remove any outdated data
-    this._history.push([time, temp]);
-    this._history = _.dropWhile(this._history,
-                                (item) => time - item[0] > this._keep);
+    // Drop old data
+    this._history = _.dropWhile(
+      this._history,
+      (item) => time - item.time > this._keep
+    );
 
+    // Add temperature change to history
+    this._history.push({ time: time, temp: temp });
+
+    // Emit new temperature change
     this.emit('temperature', time, temp);
   }
 };

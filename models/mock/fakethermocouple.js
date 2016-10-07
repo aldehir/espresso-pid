@@ -34,18 +34,18 @@ FakeThermocouple.prototype.poll = function() {
   if (this.index >= this.data.length) this.index = 0;
 
   for(var i = this.index + 1; i < this.data.length; i++) {
-    if (Math.abs(this.data[i][0] - this.time) >= (this.interval / 1000.0)) {
+    if (Math.abs((this.data[i][0] * 1000) - this.time) >= this.interval) {
       this.index = i;
       break;
     }
   }
 
-  this.time = this.data[this.index][0];
+  this.time = this.data[this.index][0] * 1000;
 
   var tempc = this.data[this.index][3];
   var tempf = (tempc * 1.8) + 32.0;
 
-  this._add(Date.now() / 1000.0, tempf);
+  this._add(Date.now(), tempf);
 
   this.index += 1;
 }
